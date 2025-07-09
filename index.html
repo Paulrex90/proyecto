@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propuesta de Servicios de Mediación - Centro de Mediación Nueva Vida y Porvenir</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F7F4;
+            color: #3D405B;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .custom-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white sticky top-0 z-50 shadow-md">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <div class="text-2xl font-bold text-[#3D405B]">
+                    Centro de Mediación Nueva Vida y Porvenir
+                </div>
+            </div>
+            <a href="#contacto" class="bg-[#81B29A] text-white font-bold py-2 px-4 rounded-lg hover:bg-opacity-90 transition-colors">
+                Contactar
+            </a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero" class="text-center py-20 px-6 bg-white">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 text-[#3D405B]">Soluciones que Unen: El Camino Inteligente para la Recuperación de Cartera y Resolución de Conflictos</h1>
+            <p class="text-lg max-w-3xl mx-auto text-gray-600">Presentamos una propuesta de colaboración estratégica con su Cooperativa de Ahorro y Crédito, ofreciendo una vía más humana, rápida y económica para gestionar disputas y optimizar la recuperación de activos.</p>
+        </section>
+
+        <section id="beneficios" class="py-16 px-6">
+            <div class="container mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold mb-2">Beneficios Estratégicos para su Cooperativa y sus Miembros</h2>
+                    <p class="text-gray-600 max-w-2xl mx-auto">La mediación es una herramienta poderosa que protege los intereses financieros y las relaciones con sus asociados.</p>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="bg-white p-6 rounded-lg custom-shadow text-center">
+                        <div class="text-4xl mb-4 text-[#E07A5F]">📈</div>
+                        <h3 class="text-xl font-bold mb-2">Optimización de Cartera</h3>
+                        <p class="text-gray-600">Agilice la recuperación de deudas y minimice pérdidas, manteniendo la relación con sus asociados.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg custom-shadow text-center">
+                        <div class="text-4xl mb-4 text-[#E07A5F]">🛡️</div>
+                        <h3 class="text-xl font-bold mb-2">Mitigación de Riesgos</h3>
+                        <p class="text-gray-600">Reduzca la exposición a litigios prolongados y costosos, protegiendo los recursos de la cooperativa.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg custom-shadow text-center">
+                        <div class="text-4xl mb-4 text-[#E07A5F]">💖</div>
+                        <h3 class="text-xl font-bold mb-2">Fidelización de Miembros</h3>
+                        <p class="text-gray-600">Ofrezca una solución empática y justa, fortaleciendo la confianza y lealtad de sus asociados.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg custom-shadow text-center">
+                        <div class="text-4xl mb-4 text-[#E07A5F]">📊</div>
+                        <h3 class="text-xl font-bold mb-2">Eficiencia Operativa</h3>
+                        <p class="text-gray-600">Descongestione sus departamentos legales y administrativos con procesos de resolución más rápidos.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="calculadora" class="py-16 px-6 bg-white">
+            <div class="container mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold mb-2">Calcule la Inversión en Resolución de Conflictos</h2>
+                    <p class="text-gray-600 max-w-2xl mx-auto">Nuestra estructura de precios es transparente y competitiva. Ingrese el valor estimado de la disputa para ver los honorarios y gastos administrativos.</p>
+                </div>
+
+                <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-8 items-start">
+                    <div class="bg-[#F8F7F4] p-8 rounded-lg border border-gray-200">
+                        <label for="cuantiaInput" class="block text-lg font-medium mb-2">Valor de la Cuantía ($)</label>
+                        <input type="number" id="cuantiaInput" placeholder="Ej: 7500" class="w-full p-3 border border-gray-300 rounded-lg text-xl focus:ring-2 focus:ring-[#81B29A] focus:outline-none">
+                        
+                        <div class="mt-8 p-6 bg-white rounded-lg custom-shadow">
+                            <h4 class="text-lg font-bold mb-4">Detalle de Costos Estimados</h4>
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-baseline">
+                                    <span class="text-gray-600">Honorarios:</span>
+                                    <span id="honorarios" class="text-2xl font-bold text-[#3D405B]">$0</span>
+                                </div>
+                                <div class="flex justify-between items-baseline">
+                                    <span class="text-gray-600">Gastos Administrativos:</span>
+                                    <span id="gastosAdministrativos" class="text-2xl font-bold text-[#3D405B]">$0</span>
+                                </div>
+                                <hr class="my-2 border-dashed">
+                                <div class="flex justify-between items-baseline">
+                                    <span class="text-xl font-bold">Total a Invertir:</span>
+                                    <span id="total" class="text-3xl font-bold text-[#E07A5F]">$0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                        <h3 class="font-bold text-xl mb-4">Tabla de Referencia de Honorarios</h3>
+                        <p class="text-sm text-gray-600 mb-4">Los gastos administrativos corresponden a $25 dólares, aplicable para todos los rangos.</p>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm">
+                                <thead class="bg-gray-200">
+                                    <tr>
+                                        <th class="p-2 rounded-tl-lg">Rango de Cuantía</th>
+                                        <th class="p-2">Honorario</th>
+                                        <th class="p-2">Gastos Adm.</th>
+                                        <th class="p-2 rounded-tr-lg">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b"><td class="p-2">$0.01 - $1,000</td><td class="p-2 font-bold">$40</td><td class="p-2 font-bold">$25</td><td class="p-2 font-bold">$65</td></tr>
+                                    <tr class="border-b"><td class="p-2">$1,000.01 - $5,000</td><td class="p-2 font-bold">$50</td><td class="p-2 font-bold">$25</td><td class="p-2 font-bold">$75</td></tr>
+                                    <tr class="border-b"><td class="p-2">$5,000.01 - $10,000</td><td class="p-2 font-bold">$70</td><td class="p-2 font-bold">$25</td><td class="p-2 font-bold">$95</td></tr>
+                                    <tr class="border-b"><td class="p-2">$10,000.01 - $20,000</td><td class="p-2 font-bold">$100</td><td class="p-2 font-bold">$25</td><td class="p-2 font-bold">$125</td></tr>
+                                    <tr class="border-b"><td class="p-2">$20,000.01 - $35,000</td><td class="p-2 font-bold">$150</td><td class="p-2 font-bold">$25</td><td class="p-2 font-bold">$175</td></tr>
+                                    <tr class="border-b"><td class="p-2">$35,000.01 - $50,000</td><td class="p-2 font-bold">$200</td><td class="p-2 font-bold">$25</td><td class="p-2 font-bold">$225</td></tr>
+                                    <tr><td class="p-2 rounded-bl-lg">Mayor a $50,000</td><td class="p-2 font-bold">1.5% del total</td><td class="p-2 font-bold">Exenta de pago</td><td class="p-2 font-bold">Valor a calcular</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="comparacion" class="py-16 px-6">
+            <div class="container mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold mb-2">Mediación vs. Litigio: Impacto en la Cartera de su Cooperativa</h2>
+                    <p class="text-gray-600 max-w-2xl mx-auto">Visualice el ahorro potencial y la eficiencia al elegir la mediación. El gráfico compara el costo de la mediación con un estimado conservador de los costos de un litigio para el valor que usted ingresó.</p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="costoChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="proceso" class="py-16 px-6 bg-white">
+             <div class="container mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold mb-2">Proceso de Mediación: Eficiencia y Transparencia</h2>
+                    <p class="text-gray-600 max-w-2xl mx-auto">Nuestro proceso está diseñado para ser claro, rápido y efectivo, beneficiando tanto a la cooperativa como a sus miembros.</p>
+                </div>
+                <div class="max-w-3xl mx-auto grid sm:grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                    <div class="flex flex-col items-center">
+                        <div class="bg-[#81B29A] text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mb-4">1</div>
+                        <h3 class="font-bold">Contacto y Referencia</h3>
+                        <p class="text-sm text-gray-600">La Cooperativa nos refiere el caso o el miembro nos contacta directamente.</p>
+                    </div>
+                     <div class="flex flex-col items-center">
+                        <div class="bg-[#81B29A] text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mb-4">2</div>
+                        <h3 class="font-bold">Sesión de Evaluación</h3>
+                        <p class="text-sm text-gray-600">Analizamos la situación y la viabilidad de la mediación con las partes involucradas.</p>
+                    </div>
+                     <div class="flex flex-col items-center">
+                        <div class="bg-[#81B29A] text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mb-4">3</div>
+                        <h3 class="font-bold">Proceso de Mediación</h3>
+                        <p class="text-sm text-gray-600">Iniciamos las sesiones guiadas, buscando un acuerdo equitativo.</p>
+                    </div>
+                     <div class="flex flex-col items-center">
+                        <div class="bg-[#81B29A] text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mb-4">4</div>
+                        <h3 class="font-bold">Acuerdo y Cierre</h3>
+                        <p class="text-sm text-gray-600">Se formaliza el acuerdo, protegiendo los intereses de la Cooperativa y sus miembros.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer id="contacto" class="bg-[#3D405B] text-white">
+        <div class="container mx-auto py-16 px-6 text-center">
+            <h2 class="text-3xl font-bold mb-4">Colaboremos para una Gestión de Cartera más Eficiente</h2>
+            <p class="max-w-2xl mx-auto mb-8">Fortalezca la relación con sus miembros y optimice sus procesos de recuperación. Contáctenos para discutir una alianza estratégica.</p>
+            <a href="https://wa.me/message/MQGC3W7UZ4H7K1" class="bg-[#E07A5F] text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-opacity-90 transition-colors">Solicitar Reunión Estratégica</a>
+            <div class="mt-12 text-gray-300">
+                <p>Centro de Mediación Nueva Vida y Porvenir</p>
+                <p>Quito, Ecuador</p>
+                <p>Teléfono: 0995552118</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cuantiaInput = document.getElementById('cuantiaInput');
+            const honorariosEl = document.getElementById('honorarios');
+            const gastosAdministrativosEl = document.getElementById('gastosAdministrativos');
+            const totalEl = document.getElementById('total');
+
+            const precios = [
+                { min: 0.01, max: 1000, honorario: 40, gastosAdmTabla: 25, totalTabla: 65 },
+                { min: 1000.01, max: 5000, honorario: 50, gastosAdmTabla: 25, totalTabla: 75 },
+                { min: 5000.01, max: 10000, honorario: 70, gastosAdmTabla: 25, totalTabla: 95 },
+                { min: 10000.01, max: 20000, honorario: 100, gastosAdmTabla: 25, totalTabla: 125 },
+                { min: 20000.01, max: 35000, honorario: 150, gastosAdmTabla: 25, totalTabla: 175 },
+                { min: 35000.01, max: 50000, honorario: 200, gastosAdmTabla: 25, totalTabla: 225 },
+            ];
+
+            const formatter = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+            });
+
+            function calcularCostos(cuantia) {
+                if (cuantia <= 0) return { honorario: 0, gastosAdministrativos: 0, total: 0 };
+
+                let honorario = 0;
+                const gastosAdministrativosFijos = 25; // Gastos Administrativos fixed at $25
+                let total = 0;
+
+                const rango = precios.find(p => cuantia >= p.min && cuantia <= p.max);
+                if (rango) {
+                    honorario = rango.honorario;
+                    total = honorario + gastosAdministrativosFijos; // Recalculate total based on fixed $25
+                } else if (cuantia > 50000) {
+                    honorario = cuantia * 0.015; // 1.5% del total de la cuantía para honorario
+                    // For "Mayor a $50,000", Gastos Administrativos are "Exenta de pago", so they are 0.
+                    total = honorario; 
+                }
+                
+                // Ensure gastosAdministrativos is 0 if cuantia > 50000, otherwise fixed $25
+                const currentGastosAdministrativos = cuantia > 50000 ? 0 : gastosAdministrativosFijos;
+
+                return { honorario: honorario, gastosAdministrativos: currentGastosAdministrativos, total: total };
+            }
+
+            function actualizarVista(cuantia) {
+                const costos = calcularCostos(cuantia);
+                honorariosEl.textContent = formatter.format(costos.honorario);
+                gastosAdministrativosEl.textContent = formatter.format(costos.gastosAdministrativos);
+                totalEl.textContent = formatter.format(costos.total);
+                actualizarGrafico(cuantia, costos.total);
+            }
+            
+            const ctx = document.getElementById('costoChart').getContext('2d');
+            const costoChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Costo Total'],
+                    datasets: [{
+                        label: 'Mediación',
+                        data: [0],
+                        backgroundColor: '#81B29A',
+                        borderColor: '#81B29A',
+                        borderWidth: 1
+                    }, {
+                        label: 'Litigio (Estimado)',
+                        data: [0],
+                        backgroundColor: '#E07A5F',
+                        borderColor: '#E07A5F',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Comparación de Costos Estimados'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.x !== null) {
+                                        label += formatter.format(context.parsed.x);
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value, index, ticks) {
+                                    return '$' + value;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            function actualizarGrafico(cuantia, costoMediacion) {
+                // Estimado de litigio: 15% de la cuantía + un costo base administrativo/judicial (e.g., $500)
+                // Esto es una simplificación para la comparación.
+                const costoLitigioEstimado = (cuantia * 0.15) + 500; 
+                costoChart.data.datasets[0].data[0] = costoMediacion > 0 ? costoMediacion : 0;
+                costoChart.data.datasets[1].data[0] = costoMediacion > 0 ? costoLitigioEstimado : 0;
+                costoChart.update();
+            }
+
+            cuantiaInput.addEventListener('input', (e) => {
+                const valor = parseFloat(e.target.value) || 0;
+                actualizarVista(valor);
+            });
+            
+            actualizarVista(0);
+        });
+    </script>
+</body>
+</html>
