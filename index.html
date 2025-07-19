@@ -3,336 +3,419 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Propuesta de Servicios de Mediación - Centro de Mediación Nueva Vida y Porvenir</title>
+    <title>Análisis Interactivo: Reparación a Víctimas en Ecuador</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #F8F7F4;
-            color: #3D405B;
+            background-color: #f1f5f9;
+            color: #334155;
+            scroll-behavior: smooth;
         }
-        .chart-container {
-            position: relative;
-            width: 100%;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-            height: 300px;
-            max-height: 400px;
+        .case-card {
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 44px 6px -2px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
         }
-        @media (min-width: 768px) {
-            .chart-container {
-                height: 350px;
-            }
+        .case-title {
+            color: #1e3a8a;
         }
-        .custom-shadow {
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+        .text-highlight {
+            color: #2563eb;
+            font-weight: 600;
+        }
+        details {
+            border-top: 1px solid #e2e8f0;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+        }
+        summary {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1e3a8a;
+            cursor: pointer;
+            outline: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            list-style: none;
+        }
+        summary::-webkit-details-marker { display: none; }
+        summary:hover { color: #2563eb; }
+        summary .icon {
+            transition: transform 0.2s ease-in-out;
+            font-size: 1.5rem;
+        }
+        details[open] summary .icon { transform: rotate(45deg); }
+        .details-content {
+            padding-left: 1.5rem;
+            border-left: 2px solid #93c5fd;
+            margin-left: 0.5rem;
+            margin-top: 1rem;
+        }
+        .filter-btn {
+            transition: all 0.2s ease-in-out;
+        }
+        .filter-btn.active {
+            background-color: #1e3a8a;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .icon-list li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        .icon-list .icon {
+            font-size: 1.5rem;
+            margin-right: 0.75rem;
+            width: 28px;
+            text-align: center;
         }
     </style>
 </head>
 <body class="antialiased">
+    <div class="max-w-7xl mx-auto p-4 md:p-8">
 
-    <header class="bg-white sticky top-0 z-50 shadow-md">
-        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="flex items-center">
-                <div class="text-2xl font-bold text-[#3D405B]">
-                    Centro de Mediación Nueva Vida y Porvenir
+        <header class="text-center py-8 mb-8">
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-2 text-slate-800">Reparación a Víctimas en Ecuador</h1>
+            <p class="text-xl md:text-2xl font-light text-slate-600">Un Análisis Interactivo de Casos Emblemáticos</p>
+        </header>
+
+        <main>
+            <!-- Interactive Dashboard Section -->
+            <section id="dashboard" class="case-card p-6 mb-12">
+                <h2 class="text-2xl font-bold case-title mb-4">Dashboard de Medidas de Reparación</h2>
+                <p class="mb-6 text-slate-600">
+                    Este dashboard permite visualizar la frecuencia de las diferentes medidas de reparación en los casos presentados. Utiliza los filtros para explorar los casos según el tipo de vulneración principal y observa cómo cambia la distribución de las medidas.
+                </p>
+                <div id="filters" class="flex flex-wrap gap-2 md:gap-4 justify-center mb-8">
+                    <button class="filter-btn active py-2 px-4 bg-white border border-slate-300 rounded-full shadow-sm hover:bg-slate-100" data-filter="all">Todos los Casos</button>
+                    <button class="filter-btn py-2 px-4 bg-white border border-slate-300 rounded-full shadow-sm hover:bg-slate-100" data-filter="estado">Violencia de Estado</button>
+                    <button class="filter-btn py-2 px-4 bg-white border border-slate-300 rounded-full shadow-sm hover:bg-slate-100" data-filter="genero">Violencia de Género</button>
+                    <button class="filter-btn py-2 px-4 bg-white border border-slate-300 rounded-full shadow-sm hover:bg-slate-100" data-filter="laboral">Derechos Laborales y Explotación</button>
                 </div>
+                <div class="chart-container relative h-96 max-h-[400px] w-full max-w-4xl mx-auto">
+                    <canvas id="reparationChart"></canvas>
+                </div>
+            </section>
+
+            <!-- Cases Section -->
+            <div id="cases-container" class="space-y-8">
+                <!-- Case Cards will be dynamically inserted here -->
             </div>
-            <a href="#contacto" class="bg-[#81B29A] text-white font-bold py-2 px-4 rounded-lg hover:bg-opacity-90 transition-colors">
-                Contactar
-            </a>
-        </nav>
-    </header>
+        </main>
 
-    <main>
-        <section id="hero" class="text-center py-20 px-6 bg-white">
-            <h1 class="text-4xl md:text-5xl font-bold mb-4 text-[#3D405B]">Soluciones que Unen: El Camino Inteligente para la Recuperación de Cartera y Resolución de Conflictos</h1>
-            <p class="text-lg max-w-3xl mx-auto text-gray-600">Presentamos una propuesta de colaboración estratégica con su Cooperativa de Ahorro y Crédito, ofreciendo una vía más humana, rápida y económica para gestionar disputas y optimizar la recuperación de activos.</p>
-        </section>
+        <footer class="text-center py-8 mt-12 text-slate-500 text-sm">
+            <p>&copy; 2025 | Análisis Interactivo de Casos de Reparación a la Víctima en Ecuador.</p>
+        </footer>
+    </div>
 
-        <section id="beneficios" class="py-16 px-6">
-            <div class="container mx-auto">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold mb-2">Beneficios Estratégicos para su Cooperativa y sus Miembros</h2>
-                    <p class="text-gray-600 max-w-2xl mx-auto">La mediación es una herramienta poderosa que protege los intereses financieros y las relaciones con sus asociados.</p>
-                </div>
-                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    <div class="bg-white p-6 rounded-lg custom-shadow text-center">
-                        <div class="text-4xl mb-4 text-[#E07A5F]">📈</div>
-                        <h3 class="text-xl font-bold mb-2">Optimización de Cartera</h3>
-                        <p class="text-gray-600">Agilice la recuperación de deudas y minimice pérdidas, manteniendo la relación con sus asociados.</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-lg custom-shadow text-center">
-                        <div class="text-4xl mb-4 text-[#E07A5F]">🛡️</div>
-                        <h3 class="text-xl font-bold mb-2">Mitigación de Riesgos</h3>
-                        <p class="text-gray-600">Reduzca la exposición a litigios prolongados y costosos, protegiendo los recursos de la cooperativa.</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-lg custom-shadow text-center">
-                        <div class="text-4xl mb-4 text-[#E07A5F]">💖</div>
-                        <h3 class="text-xl font-bold mb-2">Fidelización de Miembros</h3>
-                        <p class="text-gray-600">Ofrezca una solución empática y justa, fortaleciendo la confianza y lealtad de sus asociados.</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-lg custom-shadow text-center">
-                        <div class="text-4xl mb-4 text-[#E07A5F]">📊</div>
-                        <h3 class="text-xl font-bold mb-2">Eficiencia Operativa</h3>
-                        <p class="text-gray-600">Descongestione sus departamentos legales y administrativos con procesos de resolución más rápidos.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <section id="calculadora" class="py-16 px-6 bg-white">
-            <div class="container mx-auto">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold mb-2">Calcule la Inversión en Resolución de Conflictos</h2>
-                    <p class="text-gray-600 max-w-2xl mx-auto">Nuestra estructura de precios es transparente y competitiva. Ingrese el valor estimado de la disputa para ver los honorarios y gastos administrativos.</p>
-                </div>
-
-                <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-8 items-start">
-                    <div class="bg-[#F8F7F4] p-8 rounded-lg border border-gray-200">
-                        <label for="cuantiaInput" class="block text-lg font-medium mb-2">Valor de la Cuantía ($)</label>
-                        <input type="number" id="cuantiaInput" placeholder="Ej: 7500" class="w-full p-3 border border-gray-300 rounded-lg text-xl focus:ring-2 focus:ring-[#81B29A] focus:outline-none">
-                        
-                        <div class="mt-8 p-6 bg-white rounded-lg custom-shadow">
-                            <h4 class="text-lg font-bold mb-4">Detalle de Costos Estimados</h4>
-                            <div class="space-y-3">
-                                <div class="flex justify-between items-baseline">
-                                    <span class="text-gray-600">Honorarios:</span>
-                                    <span id="honorarios" class="text-2xl font-bold text-[#3D405B]">$0</span>
-                                </div>
-                                <div class="flex justify-between items-baseline">
-                                    <span class="text-gray-600">Gastos Administrativos:</span>
-                                    <span id="gastosAdministrativos" class="text-2xl font-bold text-[#3D405B]">$0</span>
-                                </div>
-                                <hr class="my-2 border-dashed">
-                                <div class="flex justify-between items-baseline">
-                                    <span class="text-xl font-bold">Total a Invertir:</span>
-                                    <span id="total" class="text-3xl font-bold text-[#E07A5F]">$0</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
-                        <h3 class="font-bold text-xl mb-4">Tabla de Referencia de Honorarios</h3>
-                        <p class="text-sm text-gray-600 mb-4">Los gastos administrativos corresponden a $25 dólares, aplicable para todos los rangos.</p>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left text-sm">
-                                <thead class="bg-gray-200">
-                                    <tr>
-                                        <th class="p-2 rounded-tl-lg">Rango de Cuantía</th>
-                                        <th class="p-2">Honorario</th>
-                                        <th class="p-2">Gastos Adm.</th>
-                                        <th class="p-2 rounded-tr-lg">Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr class="border-b"><td class="p-2">$0.01 - $1,000</td><td class="p-2 font-bold">$40</td><td class="p-2 font-bold">$25</td><td class="p-2 font-bold">$65</td></tr>
-                                    <tr class="border-b"><td class="p-2">$1,000.01 - $5,000</td><td class="p-2 font-bold">$50</td><td class="p-2 font-bold">$25</td><td class="p-2 font-bold">$75</td></tr>
-                                    <tr class="border-b"><td class="p-2">$5,000.01 - $10,000</td><td class="p-2 font-bold">$70</td><td class="p-2 font-bold">$25</td><td class="p-2 font-bold">$95</td></tr>
-                                    <tr class="border-b"><td class="p-2">$10,000.01 - $20,000</td><td class="p-2 font-bold">$100</td><td class="p-2 font-bold">$25</td><td class="p-2 font-bold">$125</td></tr>
-                                    <tr class="border-b"><td class="p-2">$20,000.01 - $35,000</td><td class="p-2 font-bold">$150</td><td class="p-2 font-bold">$25</td><td class="p-2 font-bold">$175</td></tr>
-                                    <tr class="border-b"><td class="p-2">$35,000.01 - $50,000</td><td class="p-2 font-bold">$200</td><td class="p-2 font-bold">$25</td><td class="p-2 font-bold">$225</td></tr>
-                                    <tr><td class="p-2 rounded-bl-lg">Mayor a $50,000</td><td class="p-2 font-bold">1.5% del total</td><td class="p-2 font-bold">Exenta de pago</td><td class="p-2 font-bold">Valor a calcular</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="comparacion" class="py-16 px-6">
-            <div class="container mx-auto">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold mb-2">Mediación vs. Litigio: Impacto en la Cartera de su Cooperativa</h2>
-                    <p class="text-gray-600 max-w-2xl mx-auto">Visualice el ahorro potencial y la eficiencia al elegir la mediación. El gráfico compara el costo de la mediación con un estimado conservador de los costos de un litigio para el valor que usted ingresó.</p>
-                </div>
-                <div class="chart-container">
-                    <canvas id="costoChart"></canvas>
-                </div>
-            </div>
-        </section>
-
-        <section id="proceso" class="py-16 px-6 bg-white">
-             <div class="container mx-auto">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold mb-2">Proceso de Mediación: Eficiencia y Transparencia</h2>
-                    <p class="text-gray-600 max-w-2xl mx-auto">Nuestro proceso está diseñado para ser claro, rápido y efectivo, beneficiando tanto a la cooperativa como a sus miembros.</p>
-                </div>
-                <div class="max-w-3xl mx-auto grid sm:grid-cols-2 md:grid-cols-4 gap-8 text-center">
-                    <div class="flex flex-col items-center">
-                        <div class="bg-[#81B29A] text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mb-4">1</div>
-                        <h3 class="font-bold">Contacto y Referencia</h3>
-                        <p class="text-sm text-gray-600">La Cooperativa nos refiere el caso o el miembro nos contacta directamente.</p>
-                    </div>
-                     <div class="flex flex-col items-center">
-                        <div class="bg-[#81B29A] text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mb-4">2</div>
-                        <h3 class="font-bold">Sesión de Evaluación</h3>
-                        <p class="text-sm text-gray-600">Analizamos la situación y la viabilidad de la mediación con las partes involucradas.</p>
-                    </div>
-                     <div class="flex flex-col items-center">
-                        <div class="bg-[#81B29A] text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mb-4">3</div>
-                        <h3 class="font-bold">Proceso de Mediación</h3>
-                        <p class="text-sm text-gray-600">Iniciamos las sesiones guiadas, buscando un acuerdo equitativo.</p>
-                    </div>
-                     <div class="flex flex-col items-center">
-                        <div class="bg-[#81B29A] text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mb-4">4</div>
-                        <h3 class="font-bold">Acuerdo y Cierre</h3>
-                        <p class="text-sm text-gray-600">Se formaliza el acuerdo, protegiendo los intereses de la Cooperativa y sus miembros.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <footer id="contacto" class="bg-[#3D405B] text-white">
-        <div class="container mx-auto py-16 px-6 text-center">
-            <h2 class="text-3xl font-bold mb-4">Colaboremos para una Gestión de Cartera más Eficiente</h2>
-            <p class="max-w-2xl mx-auto mb-8">Fortalezca la relación con sus miembros y optimice sus procesos de recuperación. Contáctenos para discutir una alianza estratégica.</p>
-            <a href="https://wa.me/message/MQGC3W7UZ4H7K1" class="bg-[#E07A5F] text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-opacity-90 transition-colors">Solicitar Reunión Estratégica</a>
-            <div class="mt-12 text-gray-300">
-                <p>Centro de Mediación Nueva Vida y Porvenir</p>
-                <p>Quito, Ecuador</p>
-                <p>Teléfono: 0995552118</p>
-            </div>
-        </div>
-    </footer>
-    
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const cuantiaInput = document.getElementById('cuantiaInput');
-            const honorariosEl = document.getElementById('honorarios');
-            const gastosAdministrativosEl = document.getElementById('gastosAdministrativos');
-            const totalEl = document.getElementById('total');
-
-            const precios = [
-                { min: 0.01, max: 1000, honorario: 40, gastosAdmTabla: 25, totalTabla: 65 },
-                { min: 1000.01, max: 5000, honorario: 50, gastosAdmTabla: 25, totalTabla: 75 },
-                { min: 5000.01, max: 10000, honorario: 70, gastosAdmTabla: 25, totalTabla: 95 },
-                { min: 10000.01, max: 20000, honorario: 100, gastosAdmTabla: 25, totalTabla: 125 },
-                { min: 20000.01, max: 35000, honorario: 150, gastosAdmTabla: 25, totalTabla: 175 },
-                { min: 35000.01, max: 50000, honorario: 200, gastosAdmTabla: 25, totalTabla: 225 },
+        document.addEventListener('DOMContentLoaded', function () {
+            const casesData = [
+                {
+                    id: 1,
+                    title: 'Caso Fernando Jaramillo Galarza',
+                    processNumber: 'Corte Nacional de Justicia - Juicio No: 1745120090045',
+                    category: 'otro',
+                    violatedRights: [
+                        { icon: '💔', text: 'Derecho a la vida.' },
+                        { icon: '🛡️', text: 'Derecho a la integridad personal.' },
+                        { icon: '👨‍👩‍👧', text: 'Derechos de los familiares de la víctima.' },
+                        { icon: '⚖️', text: 'Derecho a la reparación integral.' }
+                    ],
+                    facts: 'El 14 de enero de 2009, Fernando Jaramillo Galarza, un menor de edad, falleció en un trágico accidente de tránsito en Quito, causado por la negligencia de un conductor de transporte público. Su madre, Verónica Galarza Altamirano, emprendió un largo proceso judicial para buscar justicia y reparación. Este caso se convirtió en un hito por la exhaustividad de la sentencia en la Corte Nacional de Justicia, que reconoció el impacto multidimensional del daño más allá de lo económico, sentando un precedente fundamental en la aplicación de la reparación integral en Ecuador.',
+                    reparations: [
+                        { type: 'Indemnización Material e Inmaterial', details: 'Se ordenó el pago de una suma considerable de $176,495.90 USD. Este monto cubrió el daño emergente (gastos funerarios, médicos y honorarios profesionales), el lucro cesante (calculado en base a la expectativa de vida productiva del menor y el salario mínimo vital, proyectando las ganancias futuras que Fernando hubiera podido generar), y la indemnización por daño moral, que cuantificó el profundo sufrimiento, la aflicción y el impacto psicológico en la madre, reconociendo el dolor y la alteración de sus condiciones de vida.' },
+                        { type: 'Rehabilitación', details: 'Se dispuso la provisión de atención psicológica y psiquiátrica a la madre de la víctima hasta su completa recuperación, garantizando el acceso a los servicios de salud mental necesarios para superar las secuelas emocionales y psicológicas del evento traumático.' },
+                        { type: 'Satisfacción', details: 'La sentencia incluyó medidas simbólicas significativas para restaurar la dignidad y la memoria de Fernando: disculpas públicas formales por parte del responsable del accidente y la empresa de transporte, el nombramiento de un puente peatonal en la vía del accidente en honor a Fernando Jaramillo Galarza, la colocación de una placa conmemorativa en su escuela, y la publicación de la sentencia en medios de comunicación de amplia circulación nacional.' },
+                        { type: 'Garantías de No Repetición', details: 'Se ordenaron medidas proactivas para prevenir futuros accidentes: la empresa de transporte fue obligada a diseñar e implementar programas de capacitación continua para sus conductores en seguridad vial y derechos humanos, y la sentencia debía ser utilizada como precedente para futuros casos y para la renovación del permiso de operación de la cooperativa involucrada, promoviendo mayor responsabilidad en el sector.' }
+                    ],
+                    reparationTags: ['Indemnización', 'Rehabilitación', 'Satisfacción', 'Garantías de No Repetición']
+                },
+                {
+                    id: 2,
+                    title: 'Sentencia No. 1330-20-EP',
+                    processNumber: 'Corte Constitucional - Acción Extraordinaria de Protección No: 1330-20-EP',
+                    category: 'laboral',
+                    violatedRights: [
+                        { icon: '💼', text: 'Derecho a la estabilidad laboral.' },
+                        { icon: '⚖️', text: 'Derecho a la reparación integral.' },
+                        { icon: '💰', text: 'Derecho al trabajo y a una remuneración justa.' },
+                        { icon: '📜', text: 'Derecho a la seguridad jurídica.' }
+                    ],
+                    facts: 'Este caso se originó a partir del despido intempestivo de un trabajador, lo que vulneró su derecho a la estabilidad laboral. Aunque las instancias judiciales inferiores reconocieron la vulneración y ordenaron el reintegro, de manera controversial negaron la indemnización económica, argumentando una supuesta "inercia" del trabajador en buscar un nuevo empleo durante el período de desvinculación. Esta decisión fue impugnada ante la Corte Constitucional mediante una Acción Extraordinaria de Protección, buscando la reparación integral plena.',
+                    reparations: [
+                        { type: 'Restitución', details: 'La Corte Constitucional ratificó la orden de reintegro del trabajador a su puesto de trabajo, buscando restablecer el vínculo laboral y las condiciones de empleo que existían antes del despido ilegal.' },
+                        { type: 'Indemnización Económica', details: 'La CC ordenó el pago de la indemnización económica completa, que incluía todas las remuneraciones y beneficios económicos dejados de percibir durante el período de inactividad laboral. La Corte sentó un precedente crucial al reafirmar que la alegada "inercia" del trabajador no podía ser un pretexto para negar la reparación integral, enfatizando que la compensación debe ser plena y efectiva, cubriendo tanto el daño emergente como el lucro cesante.' }
+                    ],
+                    reparationTags: ['Restitución', 'Indemnización']
+                },
+                {
+                    id: 3,
+                    title: 'Sentencia No. 365-18-JH/21',
+                    processNumber: 'Corte Constitucional - Habeas Corpus No: 365-18-JH/21',
+                    category: 'estado',
+                    violatedRights: [
+                        { icon: '🛡️', text: 'Derecho a la integridad personal y prohibición de tortura.' },
+                        { icon: '⛓️', text: 'Derecho a la libertad.' },
+                        { icon: '⚖️', text: 'Derecho a la reparación integral y al debido proceso.' }
+                    ],
+                    facts: 'El caso se refiere a la situación de Francisco Benjamín Carrasco Montaleza, quien fue víctima de golpes, vejaciones y torturas por parte de guías penitenciarios y policías mientras se encontraba privado de libertad en un centro de rehabilitación social. La acción de habeas corpus no solo buscaba su inmediata liberación si la detención era ilegal, sino también una reparación integral por las graves violaciones a sus derechos humanos sufridas. La Corte Constitucional analizó el caso en el contexto de una vulneración estructural y sistemática a los derechos a la integridad personal dentro del sistema penitenciario ecuatoriano, buscando abordar las causas profundas de estas violaciones.',
+                    reparations: [
+                        { type: 'Restitución', details: 'Se ordenó la inmediata libertad de la persona si su detención era ilegal o si las condiciones de detención constituían una vulneración grave e insostenible de sus derechos, buscando cesar de inmediato la violación.' },
+                        { type: 'Rehabilitación', details: 'Se dispuso que el Estado garantice el acceso a atención médica y psicológica especializada para la víctima, para tratar las secuelas físicas y psicológicas de la tortura, incluyendo terapias y medicamentos necesarios para su recuperación integral.' },
+                        { type: 'Investigación y Sanción', details: 'La Corte ordenó a la Fiscalía General del Estado iniciar una investigación exhaustiva, diligente e imparcial para identificar y sancionar a todos los responsables de la tortura, asegurando que los crímenes graves no queden en la impunidad.' },
+                        { type: 'Garantías de No Repetición', details: 'La sentencia fue significativa porque la Corte estableció parámetros mínimos para asegurar el respeto a los derechos humanos de las personas privadas de libertad. Afirmó su facultad de expedir jurisprudencia con efectos de carácter general para prevenir violaciones análogas, lo que implicó la orden de implementar medidas estructurales en el sistema de rehabilitación social, como capacitación en derechos humanos para guías penitenciarios y policías, y mejora de las condiciones carcelarias.' }
+                    ],
+                    reparationTags: ['Restitución', 'Rehabilitación', 'Investigación y Sanción', 'Garantías de No Repetición']
+                },
+                {
+                    id: 4,
+                    title: 'Sentencia No. 1169-21-EP',
+                    processNumber: 'Corte Constitucional - Acción de Protección No: 1169-21-EP',
+                    category: 'otro',
+                    violatedRights: [
+                        { icon: '♿', text: 'Derechos de las personas con discapacidad.' },
+                        { icon: '🕊️', text: 'Derecho a la igualdad y no discriminación.' },
+                        { icon: '⚖️', text: 'Derecho a la reparación integral.' }
+                    ],
+                    facts: 'Este caso aborda la vulneración de derechos de una persona con discapacidad, posiblemente relacionada con la discriminación en el acceso a servicios públicos o privados (como educación, salud, empleo, o transporte), la falta de ajustes razonables necesarios para su participación plena, o la negación de derechos fundamentales debido a su condición. La Acción de Protección fue interpuesta para buscar la tutela de sus derechos y la correspondiente reparación integral. La Corte Constitucional, en su análisis, consideró la especial protección que la Constitución y los tratados internacionales otorgan a las personas con discapacidad, buscando asegurar su inclusión y no discriminación.',
+                    reparations: [
+                        { type: 'Restitución', details: 'Se ordenaron medidas para asegurar el acceso efectivo a los derechos que le fueron negados a la persona con discapacidad. Esto podría incluir la matrícula en una institución educativa, la reincorporación a un empleo, o la adaptación de infraestructuras para garantizar la accesibilidad, buscando eliminar barreras y restablecer el goce del derecho.' },
+                        { type: 'Rehabilitación', details: 'Podría haber incluido la provisión de apoyos y ajustes razonables necesarios para la plena inclusión de la persona, como terapias de rehabilitación, asistencia tecnológica, o programas de apoyo psicosocial para superar el impacto de la discriminación y facilitar su autonomía.' },
+                        { type: 'Indemnización', details: 'Compensación por los daños materiales (como gastos médicos no cubiertos o pérdida de ingresos por discriminación laboral) e inmateriales (daño moral, sufrimiento psicológico, afectación a la dignidad y al proyecto de vida) derivados de la discriminación o la falta de acceso a derechos.' },
+                        { type: 'Garantías de No Repetición', details: 'La sentencia probablemente incluyó la orden de que las instituciones públicas o privadas involucradas implementen políticas y protocolos para prevenir futuras vulneraciones de derechos de personas con discapacidad. Esto podría implicar la adaptación de infraestructuras, la revisión de normativas internas, y capacitaciones obligatorias a su personal sobre el enfoque de derechos humanos y discapacidad, y la importancia de los ajustes razonables.' }
+                    ],
+                    reparationTags: ['Restitución', 'Rehabilitación', 'Indemnización', 'Garantías de No Repetición']
+                },
+                {
+                    id: 5,
+                    title: 'Caso Hermanos Restrepo',
+                    processNumber: 'Acuerdo de Solución Amistosa (CIDH) y procesos nacionales',
+                    category: 'estado',
+                    violatedRights: [
+                        { icon: '💔', text: 'Derecho a la vida y a la libertad personal.' },
+                        { icon: '🛡️', text: 'Derecho a la integridad personal y prohibición de desaparición forzada.' },
+                        { icon: '🔎', text: 'Derecho a la verdad y a las garantías judiciales.' }
+                    ],
+                    facts: 'El 8 de enero de 1988, los hermanos Santiago (17) y Andrés (14) Restrepo Arismendi, de nacionalidad colombiana, fueron detenidos ilegalmente en Quito por agentes de la Policía Nacional y posteriormente desaparecidos forzadamente. La incansable lucha de sus padres, Pedro Restrepo y Luz Elena Arismendi, a través de plantones semanales y la búsqueda de apoyo internacional, fue crucial para visibilizar este crimen de lesa humanidad y forzar al Estado ecuatoriano a reconocer su responsabilidad, convirtiéndose en un hito en la historia de los derechos humanos en Ecuador.',
+                    reparations: [
+                        { type: 'Investigación y Sanción', details: 'El Estado se comprometió a investigar exhaustivamente los hechos, identificar a los responsables de la desaparición y sancionarlos penalmente. Esto llevó a la condena de varios policías involucrados, lo que representó un avance significativo en la lucha contra la impunidad en Ecuador.' },
+                        { type: 'Búsqueda de los Desaparecidos', details: 'Se realizaron esfuerzos continuos para encontrar los cuerpos de los hermanos, incluyendo expediciones al lago de Papallacta, donde se presumía que habían sido arrojados. Aunque sus restos no han sido recuperados, la búsqueda activa fue parte del derecho a la verdad y la reparación de la familia.' },
+                        { type: 'Indemnización Económica', details: 'El Estado ecuatoriano pagó una indemnización económica a la familia Restrepo Arismendi por los daños materiales (pérdida de ingresos futuros de los hijos, gastos de búsqueda y legales) e inmateriales (sufrimiento prolongado, daño moral, afectación al proyecto de vida de los padres).' },
+                        { type: 'Satisfacción', details: 'Se realizó un reconocimiento público de la responsabilidad internacional del Estado y disculpas públicas por parte de altas autoridades. Se construyó un monumento en memoria de las víctimas de desaparición forzada y se aseguró la publicación de informes relacionados con el caso. Además, el caso fue un catalizador clave para la creación de la Comisión de la Verdad en Ecuador.' },
+                        { type: 'Garantías de No Repetición', details: 'Se impulsaron reformas significativas dentro de la Policía Nacional y otras instituciones de seguridad para evitar futuras violaciones de derechos humanos, incluyendo la capacitación obligatoria en derechos humanos para los agentes. El caso también contribuyó directamente a la creación de la Defensoría del Pueblo en 1996.' }
+                    ],
+                    reparationTags: ['Investigación y Sanción', 'Indemnización', 'Satisfacción', 'Garantías de No Repetición']
+                },
+                {
+                    id: 6,
+                    title: 'Caso Karina del Pozo',
+                    processNumber: 'Proceso Penal con Condena por Femicidio',
+                    category: 'genero',
+                    violatedRights: [
+                        { icon: '💔', text: 'Derecho a la vida y a una vida libre de violencia (Femicidio).' },
+                        { icon: '🛡️', text: 'Derecho a la integridad personal.' },
+                        { icon: '⚖️', text: 'Derecho a la justicia y al debido proceso.' }
+                    ],
+                    facts: 'Karina del Pozo, una joven de 20 años, fue reportada como desaparecida en febrero de 2013, y su cuerpo fue encontrado días después con signos de extrema violencia. Este caso se convirtió en un símbolo de la lucha contra el femicidio en Ecuador. La investigación inicial estuvo marcada por irregularidades y una falta de perspectiva de género, pero la presión social y la perseverancia de la familia fueron cruciales para que el caso avanzara, se revelara como un femicidio y culminara con la condena de los responsables. Este caso fue fundamental para impulsar la tipificación del femicidio en el Código Orgánico Integral Penal (COIP) de Ecuador.',
+                    reparations: [
+                        { type: 'Investigación y Sanción', details: 'Se llevó a cabo una investigación exhaustiva que culminó con la identificación y condena de los responsables del femicidio, lo que proporcionó un cierre legal y un acto de justicia crucial para la familia.' },
+                        { type: 'Indemnización Económica', details: 'La sentencia penal incluyó la obligación de los condenados de pagar una indemnización a los familiares de Karina del Pozo por los daños materiales (como gastos funerarios y costos legales) e inmateriales (sufrimiento, daño moral y afectación al proyecto de vida de la familia).' },
+                        { type: 'Rehabilitación', details: 'Aunque no siempre explícitamente detallado en la sentencia, el Estado tiene la obligación de garantizar el acceso a servicios de atención psicológica y psiquiátrica para los familiares de la víctima, dada la naturaleza traumática de la pérdida y la violencia sufrida.' },
+                        { type: 'Satisfacción', details: 'El proceso judicial y la condena sirvieron como un reconocimiento oficial de los hechos y de la violencia de género. El caso Karina del Pozo se convirtió en un referente en la lucha contra el femicidio en Ecuador, contribuyendo a la sensibilización pública y a la demanda de justicia, y su memoria es mantenida viva a través de diversas iniciativas.' },
+                        { type: 'Garantías de No Repetición', details: 'El caso fue un factor determinante que impulsó la tipificación del femicidio como delito autónomo en el Código Orgánico Integral Penal (COIP) en 2014, lo que representa una garantía legislativa fundamental. También promovió la mejora de los protocolos de investigación con perspectiva de género y la capacitación de operadores de justicia.' }
+                    ],
+                    reparationTags: ['Investigación y Sanción', 'Indemnización', 'Rehabilitación', 'Satisfacción', 'Garantías de No Repetición']
+                },
+                {
+                    id: 7,
+                    title: 'Caso Furukawa Plantaciones C.A.',
+                    processNumber: 'Sentencia de la Corte Provincial de Pichincha y Corte Nacional',
+                    category: 'laboral',
+                    violatedRights: [
+                        { icon: '🌾', text: 'Derecho al trabajo digno y prohibición de servidumbre.' },
+                        { icon: '🎓', text: 'Derecho a la educación y derechos de los niños.' },
+                        { icon: '🏠', text: 'Derecho a la vivienda digna y a la salud.' }
+                    ],
+                    facts: 'El "Caso Furukawa Plantaciones C.A." es uno de los casos más impactantes de vulneración de derechos humanos en la historia reciente de Ecuador. Reveló una situación de servidumbre de la gleba y explotación laboral que se extendió por décadas, afectando a cientos de familias afroecuatorianas y mestizas. Estas familias trabajaron en condiciones análogas a la esclavitud en plantaciones de abacá, viviendo en campamentos precarios, sin acceso a servicios básicos ni seguridad social, y sometidas a un sistema de endeudamiento perpetuo. La denuncia de estas condiciones llevó a un proceso judicial que visibilizó la persistencia de formas modernas de esclavitud en el país.',
+                    reparations: [
+                        { type: 'Indemnización Económica', details: 'La sentencia ordenó el pago de una indemnización significativa a las víctimas por los daños materiales (salarios no pagados, falta de seguridad social, condiciones de vida precarias) e inmateriales (sufrimiento, daño moral, afectación a la dignidad, al proyecto de vida y a la identidad cultural) sufridos durante décadas. El monto buscó compensar el daño histórico y sistémico.' },
+                        { type: 'Rehabilitación', details: 'Se dispuso la provisión de atención médica, psicológica y social a las víctimas y sus familias para abordar las secuelas físicas y emocionales de la explotación, incluyendo programas de apoyo psicosocial para el trauma intergeneracional.' },
+                        { type: 'Satisfacción', details: 'La empresa Furukawa Plantaciones C.A. fue obligada a ofrecer disculpas públicas a las víctimas y a la sociedad ecuatoriana. La sentencia también sirvió como reconocimiento oficial de la existencia de la servidumbre de la gleba y debía ser publicada en medios de amplia circulación para visibilizar la verdad.' },
+                        { type:'Garantías de No Repetición', details: 'La sentencia impulsó la revisión y fortalecimiento de la normativa laboral y de derechos humanos para prevenir futuras formas de explotación. Se exigió al Estado fortalecer los mecanismos de inspección y control laboral y promover la capacitación sobre derechos laborales y humanos.' }
+                    ],
+                    reparationTags: ['Indemnización', 'Rehabilitación', 'Satisfacción', 'Garantías de No Repetición']
+                },
+                 {
+                    id: 8,
+                    title: 'Caso Fybeca',
+                    processNumber: 'Corte Nacional de Justicia y Corte IDH',
+                    category: 'estado',
+                    violatedRights: [
+                        { icon: '💔', text: 'Derecho a la vida (ejecuciones extrajudiciales).' },
+                        { icon: '🛡️', text: 'Derecho a la integridad personal (tortura).' },
+                        { icon: '⛓️', text: 'Derecho a la libertad y prohibición de desaparición forzada.' },
+                        { icon: '⚖️', text: 'Derecho a la justicia y a la verdad.' }
+                    ],
+                    facts: 'El "Caso Fybeca" se refiere a una serie de graves violaciones de derechos humanos ocurridas el 19 de noviembre de 2003 en Guayaquil, Ecuador. Durante un operativo policial en una farmacia Fybeca, supuestamente para desarticular una banda delictiva, se produjeron la ejecución extrajudicial de ocho personas y la desaparición forzada de tres. Además, varias personas fueron detenidas arbitrariamente y sometidas a torturas. El caso estuvo marcado por el ocultamiento de información, la manipulación de pruebas y la impunidad durante años, debido a la complicidad de funcionarios estatales. La incansable lucha de los familiares de las víctimas, apoyados por organizaciones de derechos humanos, llevó el caso a la justicia nacional e internacional, revelando una compleja trama de violaciones sistemáticas.',
+                    reparations: [
+                        { type: 'Investigación y Sanción', details: 'A nivel nacional, la Corte Nacional de Justicia condenó a varios ex-policías y otros implicados por los delitos de ejecución extrajudicial y desaparición forzada. La Corte IDH también ordenó al Estado continuar con las investigaciones para identificar y sancionar a todos los responsables, incluyendo a los autores intelectuales y a quienes obstruyeron la justicia.' },
+                        { type: 'Búsqueda de los Desaparecidos', details: 'Se ordenó al Estado realizar todos los esfuerzos necesarios para localizar los restos de las personas desaparecidas forzadamente, lo que es un componente esencial del derecho a la verdad y la reparación para los familiares, buscando un cierre a la incertidumbre.' },
+                        { type: 'Indemnización Económica', details: 'Se ordenó al Estado ecuatoriano pagar indemnizaciones económicas a las víctimas y sus familiares por los daños materiales (lucro cesante, daño emergente, gastos médicos y legales) e inmateriales (sufrimiento, daño moral, afectación al proyecto de vida, pérdida de oportunidades) sufridos como consecuencia de las violaciones.' },
+                        { type: 'Rehabilitación', details: 'Se dispuso la provisión de atención médica y psicológica gratuita y especializada a las víctimas y sus familiares que lo requirieran, para abordar las secuelas físicas y emocionales de las graves violaciones sufridas.' },
+                        { type: 'Satisfacción', details: 'El Estado fue obligado a realizar un acto público de reconocimiento de responsabilidad internacional y ofrecer disculpas públicas a las víctimas y sus familiares. La sentencia de la Corte IDH debía ser publicada en medios de amplia circulación y en el sitio web de la Función Judicial, y se consideraron medidas para preservar la memoria de las víctimas.' },
+                        { type: 'Garantías de No Repetición', details: 'La Corte IDH ordenó al Estado adoptar medidas para prevenir la repetición de hechos similares, incluyendo reformas en las fuerzas de seguridad para asegurar el respeto a los derechos humanos en operativos policiales. También se exigió la capacitación obligatoria en derechos humanos y uso de la fuerza para miembros de la Policía Nacional y el fortalecimiento de mecanismos de control.' }
+                    ],
+                    reparationTags: ['Investigación y Sanción', 'Indemnización', 'Satisfacción', 'Garantías de No Repetición']
+                }
             ];
 
-            const formatter = new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD',
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-            });
+            const casesContainer = document.getElementById('cases-container');
 
-            function calcularCostos(cuantia) {
-                if (cuantia <= 0) return { honorario: 0, gastosAdministrativos: 0, total: 0 };
+            function renderCases(filteredCases) {
+                casesContainer.innerHTML = '';
+                filteredCases.forEach(caseItem => {
+                    const caseCard = document.createElement('article');
+                    caseCard.className = 'case-card p-6 md:p-8';
+                    caseCard.innerHTML = `
+                        <h2 class="text-2xl md:text-3xl font-bold case-title">${caseItem.id}. ${caseItem.title}</h2>
+                        <p class="text-sm text-slate-500 mb-4">${caseItem.processNumber}</p>
+                        
+                        <h3 class="text-lg font-semibold text-slate-700 mt-6 mb-2">Derechos Vulnerados</h3>
+                        <ul class="icon-list text-slate-600">
+                            ${caseItem.violatedRights.map(right => `<li><span class="icon">${right.icon}</span>${right.text}</li>`).join('')}
+                        </ul>
 
-                let honorario = 0;
-                const gastosAdministrativosFijos = 25; // Gastos Administrativos fixed at $25
-                let total = 0;
+                        <details>
+                            <summary>Hechos Detallados <span class="icon">+</span></summary>
+                            <div class="details-content">
+                                <p class="text-slate-600 leading-relaxed">${caseItem.facts}</p>
+                            </div>
+                        </details>
 
-                const rango = precios.find(p => cuantia >= p.min && cuantia <= p.max);
-                if (rango) {
-                    honorario = rango.honorario;
-                    total = honorario + gastosAdministrativosFijos; // Recalculate total based on fixed $25
-                } else if (cuantia > 50000) {
-                    honorario = cuantia * 0.015; // 1.5% del total de la cuantía para honorario
-                    // For "Mayor a $50,000", Gastos Administrativos are "Exenta de pago", so they are 0.
-                    total = honorario; 
-                }
-                
-                // Ensure gastosAdministrativos is 0 if cuantia > 50000, otherwise fixed $25
-                const currentGastosAdministrativos = cuantia > 50000 ? 0 : gastosAdministrativosFijos;
-
-                return { honorario: honorario, gastosAdministrativos: currentGastosAdministrativos, total: total };
+                        <details>
+                            <summary>Reparación Ordenada y Análisis Profundo <span class="icon">+</span></summary>
+                            <div class="details-content">
+                                <ul class="space-y-4">
+                                    ${caseItem.reparations.map(rep => `
+                                        <li>
+                                            <p class="font-semibold text-highlight">${rep.type}</p>
+                                            <p class="text-slate-600 leading-relaxed">${rep.details}</p>
+                                        </li>
+                                    `).join('')}
+                                </ul>
+                            </div>
+                        </details>
+                    `;
+                    casesContainer.appendChild(caseCard);
+                });
             }
 
-            function actualizarVista(cuantia) {
-                const costos = calcularCostos(cuantia);
-                honorariosEl.textContent = formatter.format(costos.honorario);
-                gastosAdministrativosEl.textContent = formatter.format(costos.gastosAdministrativos);
-                totalEl.textContent = formatter.format(costos.total);
-                actualizarGrafico(cuantia, costos.total);
-            }
-            
-            const ctx = document.getElementById('costoChart').getContext('2d');
-            const costoChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Costo Total'],
+            // Charting Logic
+            const ctx = document.getElementById('reparationChart').getContext('2d');
+            const reparationLabels = ['Indemnización', 'Rehabilitación', 'Satisfacción', 'Garantías de No Repetición', 'Investigación y Sanción', 'Restitución'];
+            let chart;
+
+            function updateChart(filteredCases) {
+                const reparationCounts = reparationLabels.map(label =>
+                    filteredCases.filter(c => c.reparationTags.includes(label)).length
+                );
+
+                const chartData = {
+                    labels: reparationLabels,
                     datasets: [{
-                        label: 'Mediación',
-                        data: [0],
-                        backgroundColor: '#81B29A',
-                        borderColor: '#81B29A',
-                        borderWidth: 1
-                    }, {
-                        label: 'Litigio (Estimado)',
-                        data: [0],
-                        backgroundColor: '#E07A5F',
-                        borderColor: '#E07A5F',
-                        borderWidth: 1
+                        label: 'Número de Casos',
+                        data: reparationCounts,
+                        backgroundColor: 'rgba(37, 99, 235, 0.6)',
+                        borderColor: 'rgba(30, 64, 175, 1)',
+                        borderWidth: 1,
+                        borderRadius: 5,
                     }]
-                },
-                options: {
-                    indexAxis: 'y',
-                    maintainAspectRatio: false,
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        },
-                        title: {
-                            display: true,
-                            text: 'Comparación de Costos Estimados'
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.dataset.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    if (context.parsed.x !== null) {
-                                        label += formatter.format(context.parsed.x);
-                                    }
-                                    return label;
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value, index, ticks) {
-                                    return '$' + value;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
+                };
 
-            function actualizarGrafico(cuantia, costoMediacion) {
-                // Estimado de litigio: 15% de la cuantía + un costo base administrativo/judicial (e.g., $500)
-                // Esto es una simplificación para la comparación.
-                const costoLitigioEstimado = (cuantia * 0.15) + 500; 
-                costoChart.data.datasets[0].data[0] = costoMediacion > 0 ? costoMediacion : 0;
-                costoChart.data.datasets[1].data[0] = costoMediacion > 0 ? costoLitigioEstimado : 0;
-                costoChart.update();
+                if (chart) {
+                    chart.data = chartData;
+                    chart.update();
+                } else {
+                    chart = new Chart(ctx, {
+                        type: 'bar',
+                        data: chartData,
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            indexAxis: 'y',
+                            scales: {
+                                x: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        stepSize: 1
+                                    }
+                                },
+                                y: {
+                                    grid: {
+                                        display: false
+                                    }
+                                }
+                            },
+                            plugins: {
+                                legend: {
+                                    display: false
+                                },
+                                tooltip: {
+                                    backgroundColor: '#1e3a8a',
+                                    titleFont: {
+                                        size: 14,
+                                        weight: 'bold'
+                                    },
+                                    bodyFont: {
+                                        size: 12
+                                    },
+                                    callbacks: {
+                                        label: function(context) {
+                                            let label = context.dataset.label || '';
+                                            if (label) {
+                                                label += ': ';
+                                            }
+                                            if (context.parsed.x !== null) {
+                                                label += `${context.parsed.x} casos`;
+                                            }
+                                            return label;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
             }
 
-            cuantiaInput.addEventListener('input', (e) => {
-                const valor = parseFloat(e.target.value) || 0;
-                actualizarVista(valor);
+            // Filtering Logic
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const filter = this.dataset.filter;
+                    const filteredCases = filter === 'all' 
+                        ? casesData 
+                        : casesData.filter(c => c.category === filter);
+                    
+                    renderCases(filteredCases);
+                    updateChart(filteredCases);
+                });
             });
-            
-            actualizarVista(0);
+
+            // Initial Render
+            renderCases(casesData);
+            updateChart(casesData);
         });
     </script>
 </body>
